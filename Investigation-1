@@ -64,9 +64,3 @@ Risk	High
 Conclusion
 The investigation identified 30 failed authentication attempts against three different accounts from the same source IP 10.10.10.50. Shortly after the failed attempts, successful authentication events for the admin account were observed. This pattern is suspicious and could indicate password spraying or brute-force activity followed by successful account compromise. Further investigation should examine the successful login, endpoint activity, source IP reputation, and subsequent actions performed by the admin account.
 
-
-7. MITRE ATT&CK Mapping
-Technique	ID	Relevance
-Brute Force	T1110	Repeated authentication attempts
-Password Spraying	T1110.003	Multiple accounts targeted from one source
-Valid Accounts	T1078	Successful authentication using admin
