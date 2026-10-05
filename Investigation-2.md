@@ -28,59 +28,86 @@
 index=main (EventCode=4625 OR EventCode=4624) src_ip=10.10.10.50
 | table _time EventCode user src_ip host
 | sort _time
+```
 
-4. Investigation Timeline
-Time	EventCode	User	Source IP	Host	Interpretation
-01:30:00	4625	admin	10.10.10.50	Likhi	Failed login
-01:30:10	4625	john	10.10.10.50	Likhi	Failed login
-01:30:20	4625	backup	10.10.10.50	Likhi	Failed login
-...	...	...	...	...	Repeated failures
-01:39:00	4625	admin	10.10.10.50	Likhi	Failed login
-01:39:10	4625	john	10.10.10.50	Likhi	Failed login
-01:39:20	4625	backup	10.10.10.50	Likhi	Failed login
-01:41:00	4624	admin	10.10.10.50	Likhi	Successful login
-01:42:00	4624	admin	10.10.10.50	Likhi	Successful login
-01:43:00	4624	admin	10.10.10.50	Likhi	Successful login
-01:44:00	4624	admin	10.10.10.50	Likhi	Successful login
+---
 
+## 4. Investigation Timeline
 
-5. Investigation Results
-Indicator	Observation
-Failed authentication events	30
-Targeted accounts	3
-Targeted users	admin, john, backup
-Source IP	10.10.10.50
-Target host	Likhi
-Failure period	Approximately 9 minutes 20 seconds
-Successful authentication events	4
-Successful account	admin
-Time of first successful login	01:41:00
-Pattern	Multiple failed logins followed by successful authentication
-Risk Assessment	HIGH
+| Time | EventCode | User | Source IP | Host | Interpretation |
+|---|---:|---|---|---|---|
+| 01:30:00 | 4625 | admin | 10.10.10.50 | Likhi | Failed login |
+| 01:30:10 | 4625 | john | 10.10.10.50 | Likhi | Failed login |
+| 01:30:20 | 4625 | backup | 10.10.10.50 | Likhi | Failed login |
+| ... | ... | ... | ... | ... | Repeated failures |
+| 01:39:00 | 4625 | admin | 10.10.10.50 | Likhi | Failed login |
+| 01:39:10 | 4625 | john | 10.10.10.50 | Likhi | Failed login |
+| 01:39:20 | 4625 | backup | 10.10.10.50 | Likhi | Failed login |
+| 01:41:00 | 4624 | admin | 10.10.10.50 | Likhi | Successful login |
+| 01:42:00 | 4624 | admin | 10.10.10.50 | Likhi | Successful login |
+| 01:43:00 | 4624 | admin | 10.10.10.50 | Likhi | Successful login |
+| 01:44:00 | 4624 | admin | 10.10.10.50 | Likhi | Successful login |
 
+## 5. Investigation Results
 
-6. Findings
-The investigation identified 30 failed authentication attempts originating from 10.10.10.50 and targeting three different accounts: admin, john, and backup.
-After the repeated authentication failures, the same source IP successfully authenticated as the admin account at 01:41:00.
+| Indicator | Observation |
+|---|---|
+| Failed authentication events | **30** |
+| Targeted accounts | **3** |
+| Targeted users | `admin`, `john`, `backup` |
+| Source IP | `10.10.10.50` |
+| Target host | `Likhi` |
+| Failure period | Approximately **9 minutes 20 seconds** |
+| Successful authentication events | **4** |
+| Successful account | `admin` |
+| Time of first successful login | **01:41:00** |
+| Pattern | Multiple failed logins followed by successful authentication |
+| Risk Assessment | **HIGH** |
+
+## 6. Findings
+
+The investigation identified **30 failed authentication attempts** originating from `10.10.10.50` and targeting three different accounts: `admin`, `john`, and `backup`.
+
+After the repeated authentication failures, the same source IP successfully authenticated as the `admin` account at **01:41:00**.
+
 The sequence is suspicious because the successful authentication occurred shortly after repeated failures from the same source IP.
-7. Conclusion
-The observed authentication pattern is consistent with suspicious password-spraying or brute-force activity followed by successful authentication.
-However, the available authentication logs alone do not confirm account compromise.
+
+---
+
+## 7. Conclusion
+
+The observed authentication pattern is consistent with suspicious **password-spraying or brute-force activity** followed by successful authentication.
+
+However, the available authentication logs alone do **not confirm account compromise**.
+
 Further investigation should examine:
-- The admin account's activity after the successful login
+
+- Admin account activity after the successful login
 - Process creation events
 - Network connections
 - File and system changes
 - Source IP reputation
 - Additional Windows Security events
 - Subsequent authentication activity
-Final Assessment
-Risk: HIGH — Further investigation required.
-8. Evidence
-Evidence 1 — Failed Login Activity
-Splunk screenshot showing the Event ID 4625 failed authentication events.
-Evidence 2 — Authentication Correlation
-Splunk screenshot showing the 4625 → 4624 authentication sequence.
-Evidence 3 — Investigation Statistics
-Source IP	Failed Logins	Unique Users	Targeted Users
-10.10.10.50	30	3	admin, backup, john
+
+### Final Assessment
+
+> **Risk: HIGH — Further investigation required.**
+
+---
+
+## 8. Evidence
+
+### Evidence 1 — Failed Login Activity
+
+Splunk screenshot showing the **Event ID 4625** failed authentication events.
+
+### Evidence 2 — Authentication Correlation
+
+Splunk screenshot showing the **4625 → 4624** authentication sequence.
+
+### Evidence 3 — Investigation Statistics
+
+| Source IP | Failed Logins | Unique Users | Targeted Users |
+|---|---:|---:|---|
+| `10.10.10.50` | **30** | **3** | `admin`, `backup`, `john` |
