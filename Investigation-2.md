@@ -1,4 +1,5 @@
-Investigation #2 — Failed Logins Followed by Successful Authentication
+# Investigation #2 — Failed Logins Followed by Successful Authentication
+
 ## 1. Investigation Objective
 
 | Field | Details |
@@ -13,10 +14,17 @@ Investigation #2 — Failed Logins Followed by Successful Authentication
 | Targeted Accounts | `admin`, `john`, `backup` |
 | Investigation Goal | Determine whether repeated failed logins were followed by successful authentication from the same source IP |
 
-2. Investigation Question
-Did the source IP 10.10.10.50 successfully authenticate after generating multiple failed login attempts against different user accounts?
+---
 
-3. SPL Query — Authentication Timeline
+## 2. Investigation Question
+
+**Did the source IP `10.10.10.50` successfully authenticate after generating multiple failed login attempts against different user accounts?**
+
+---
+
+## 3. SPL Query — Authentication Timeline
+
+```spl
 index=main (EventCode=4625 OR EventCode=4624) src_ip=10.10.10.50
 | table _time EventCode user src_ip host
 | sort _time
@@ -48,8 +56,7 @@ Successful authentication events	4
 Successful account	admin
 Time of first successful login	01:41:00
 Pattern	Multiple failed logins followed by successful authentication
-Risk Assessment	High
-
+Risk Assessment	HIGH
 
 
 6. Findings
@@ -58,7 +65,8 @@ After the repeated authentication failures, the same source IP successfully auth
 The sequence is suspicious because the successful authentication occurred shortly after repeated failures from the same source IP.
 7. Conclusion
 The observed authentication pattern is consistent with suspicious password-spraying or brute-force activity followed by successful authentication.
-However, the available authentication logs alone do not confirm account compromise. Further investigation should examine:
+However, the available authentication logs alone do not confirm account compromise.
+Further investigation should examine:
 - The admin account's activity after the successful login
 - Process creation events
 - Network connections
@@ -68,13 +76,11 @@ However, the available authentication logs alone do not confirm account compromi
 - Subsequent authentication activity
 Final Assessment
 Risk: HIGH — Further investigation required.
-
 8. Evidence
 Evidence 1 — Failed Login Activity
-Capture your Splunk screenshot showing the 4625 events.
+Splunk screenshot showing the Event ID 4625 failed authentication events.
 Evidence 2 — Authentication Correlation
-Capture the Splunk screenshot showing the 4625 → 4624 sequence.
+Splunk screenshot showing the 4625 → 4624 authentication sequence.
 Evidence 3 — Investigation Statistics
-If you have your earlier stats result, include it showing:
 Source IP	Failed Logins	Unique Users	Targeted Users
 10.10.10.50	30	3	admin, backup, john
