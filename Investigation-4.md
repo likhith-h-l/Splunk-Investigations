@@ -168,4 +168,27 @@ The suspicious authentication results were then saved using `outputlookup`, allo
 
 ---
 
+## 9. Conclusion
+
+The investigation identified a **high-volume failed authentication source** generating repeated Event ID 4625 activity against multiple user accounts.
+
+The activity is consistent with suspicious authentication behavior and may indicate **password-spraying or brute-force activity**.
+
+This investigation also demonstrated how Splunk can be used not only to detect suspicious activity, but also to:
+
+- Perform rapid statistical triage using `tstats`
+- Enrich events using `lookup`
+- Handle missing information using `fillnull`
+- Save investigation results using `outputlookup`
+- Reuse saved results using `inputlookup`
+
+The authentication data alone does **not confirm account compromise**.
+
+Further investigation should correlate these findings with successful authentication events, endpoint activity, network activity, and additional security logs.
+
+### Final Assessment
+
+> **Risk: HIGH — Suspicious high-volume authentication activity requires further investigation.**
+
+---
 
