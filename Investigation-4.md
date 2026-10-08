@@ -150,5 +150,22 @@ The saved lookup can later be reused for:
 
 ---
 
+## 8. Findings
+
+The investigation identified `10.10.10.50` as a high-volume source of failed authentication activity.
+
+A total of **30 Event ID 4625** failed authentication events were observed against three different accounts:
+
+- `admin`
+- `john`
+- `backup`
+
+The repeated attempts originated from the same source IP and targeted multiple accounts on the `Likhi` host.
+
+The `asset_inventory` lookup was used to add contextual information to the source IP. The `fillnull` command was used to handle any missing lookup information without leaving blank values in the investigation results.
+
+The suspicious authentication results were then saved using `outputlookup`, allowing the data to be reused in future investigations through `inputlookup`.
+
+---
 
 
