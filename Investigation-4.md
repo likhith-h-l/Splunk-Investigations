@@ -192,3 +192,31 @@ Further investigation should correlate these findings with successful authentica
 
 ---
 
+
+## 10. Evidence
+
+### Evidence 1 — Host Activity Triage
+
+Splunk screenshot showing the `tstats` results used to identify high-volume hosts.
+
+### Evidence 2 — Failed Authentication Statistics
+
+Splunk screenshot showing the `stats` results with failed attempts and targeted accounts.
+
+### Evidence 3 — Lookup Enrichment
+
+Splunk screenshot showing the `asset_inventory` lookup results.
+
+### Evidence 4 — Missing Value Handling
+
+Splunk screenshot showing the use of `fillnull` for missing lookup information.
+
+### Evidence 5 — Saved Investigation Results
+
+Splunk screenshot showing the `outputlookup` results and the saved `suspicious_authentication_ips.csv` lookup.
+
+### Evidence 6 — Reused Lookup
+
+Splunk screenshot showing the saved data being loaded with `inputlookup`.
+
+---
