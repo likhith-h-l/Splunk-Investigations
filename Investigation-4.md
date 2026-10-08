@@ -220,3 +220,18 @@ Splunk screenshot showing the `outputlookup` results and the saved `suspicious_a
 Splunk screenshot showing the saved data being loaded with `inputlookup`.
 
 ---
+
+## 11. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Source IP | `10.10.10.50` |
+| Host | `Likhi` |
+| Failed Event | `4625` |
+| Failed Attempts | **30** |
+| Targeted Accounts | **3** |
+| Targeted Users | `admin`, `john`, `backup` |
+| Analysis Technique | High-volume authentication triage |
+| Lookup Used | `asset_inventory` |
+| Results Saved To | `suspicious_authentication_ips.csv` |
+| Risk | **HIGH** |
