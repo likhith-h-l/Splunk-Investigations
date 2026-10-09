@@ -198,3 +198,33 @@ Further investigation should examine:
 ## 9. Evidence
 
 ###
+
+### Evidence 1 — Process-Creation Events
+
+Add a Splunk screenshot showing the available Event ID 4688 events.
+
+### Evidence 2 — PowerShell Search Results
+
+Add a screenshot showing PowerShell process-creation events returned by the investigation query.
+
+### Evidence 3 — Command-Line Analysis
+
+Add a screenshot showing the relevant command-line field and parent process, with sensitive values redacted where necessary.
+
+### Evidence 4 — Corroborating Activity
+
+If available, add evidence from PowerShell script-block logs, EDR telemetry, or associated network events.
+
+---
+
+## 10. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Windows Event ID | `4688` |
+| Process of Interest | `powershell.exe` / `pwsh.exe` |
+| Key Fields | Process, parent process, command line, user, host |
+| Investigation Technique | Process Creation Analysis |
+| Detection Method | Command-line Pattern Analysis |
+| Supporting Evidence | Windows logs, PowerShell logs, EDR, network telemetry |
+| Risk Decision | Based on validated evidence and investigation context |
