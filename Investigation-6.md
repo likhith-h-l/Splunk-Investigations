@@ -172,3 +172,47 @@ The final findings must be based on actual events returned by Splunk rather than
 
 ---
 
+## 8. Conclusion
+
+Windows Scheduled Tasks provide a legitimate mechanism for automating recurring system operations.
+
+However, attackers can abuse this functionality to maintain persistence and execute malicious programs automatically.
+
+Windows Security Event ID 4698 provides useful evidence about scheduled-task creation. Analysing task names, execution commands, user accounts, and task definitions can help SOC analysts identify potentially unauthorized persistence mechanisms.
+
+Further investigation should examine:
+
+- The complete scheduled-task XML definition.
+- The task's execution trigger and frequency.
+- The executable or script referenced by the task.
+- Windows process-creation events (Event ID 4688).
+- PowerShell script-block logging (Event ID 4104), where available.
+- Related file creation and modification events.
+- Endpoint Detection and Response (EDR) alerts.
+- Whether the task is associated with legitimate administrative activity.
+
+### Final Assessment
+
+> **Assessment: Investigate newly created scheduled tasks and validate their execution commands, associated user accounts, and task configurations before determining whether unauthorized persistence is present.**
+
+---
+
+## 9. Evidence
+
+### Evidence 1 — Scheduled Task Creation Events
+
+Add a Splunk screenshot showing available Event ID 4698 events.
+
+### Evidence 2 — Scheduled Task Details
+
+Add a screenshot showing the task name, associated user, and task definition.
+
+### Evidence 3 — Suspicious Command Analysis
+
+Add a screenshot showing potentially suspicious execution commands, including PowerShell arguments or script paths.
+
+### Evidence 4 — Corroborating Activity
+
+If available, add evidence from Event ID 4688, PowerShell Event ID 4104, or EDR telemetry.
+
+---
