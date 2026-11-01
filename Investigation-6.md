@@ -54,3 +54,121 @@ This query searches for scheduled-task creation events and displays the associat
 **Note:** Windows field names vary depending on the logging configuration. Inspect the raw event if important fields are empty and adapt the field names accordingly.
 
 ---
+
+## 4. Investigation Timeline
+
+The following is an **illustrative example of a suspicious scheduled-task creation event**, not a verified result from the current Splunk dataset.
+
+| Time | EventCode | User | Task Name | Interpretation |
+|---|---:|---|---|---|
+| 03:15:22 | 4698 | john | `WindowsUpdateCheck` | Newly created task requiring investigation |
+
+### Example of a Suspicious Task Command
+
+An illustrative scheduled-task action might contain:
+
+```text
+powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File C:\Users\Public\update.ps1
+```
+
+This example contains indicators worth investigating:
+
+- `powershell.exe` — Executes PowerShell commands.
+- `-WindowStyle Hidden` — Requests a hidden PowerShell window.
+- `-ExecutionPolicy Bypass` — Bypasses the PowerShell execution policy for that process.
+- `C:\Users\Public\update.ps1` — A script stored in a publicly accessible directory.
+
+These indicators do not automatically prove malicious activity. Legitimate administrative tasks can also use PowerShell and scheduled execution.
+
+---
+
+## 5. SPL Query — Suspicious Scheduled Task Indicators
+
+To identify scheduled tasks containing potentially suspicious execution patterns, I used the following query.
+
+### SPL Query
+
+```spl
+index=main EventCode=4698
+| eval actor=coalesce(SubjectUserName, user, AccountName)
+| eval task_name=lower(coalesce(TaskName, Task_Name, taskname))
+| eval task_content=lower(coalesce(TaskContent, Task_Content, taskcontent))
+| eval suspicious_indicator=if(
+    like(task_content, "%powershell%")
+    OR like(task_content, "%-windowstyle hidden%")
+    OR like(task_content, "%executionpolicy bypass%")
+    OR like(task_content, "%-enc %")
+    OR like(task_content, "%encodedcommand%")
+    OR like(task_content, "%wscript.exe%")
+    OR like(task_content, "%cscript.exe%")
+    OR like(task_content, "%-downloadstring%"),
+    "Suspicious execution indicator",
+    "Scheduled task - review context"
+)
+| table _time host actor task_name task_content suspicious_indicator
+| sort 0 _time
+```
+
+### What This Query Does
+
+| SPL Component | Purpose |
+|---|---|
+| `EventCode=4698` | Searches scheduled-task creation events |
+| `coalesce()` | Handles alternative field names |
+| `lower()` | Converts text to lowercase |
+| `like()` | Searches for suspicious command patterns |
+| `eval` | Creates a classification field |
+| `table` | Displays investigation evidence |
+| `sort` | Organizes events chronologically |
+
+The classification identifies potentially suspicious execution patterns. It is a hunting aid, not a definitive malware verdict.
+
+---
+
+## 6. Investigation Results
+
+The following table describes the findings that should be recorded after running the queries. The example values are illustrative and must be replaced if the actual Splunk output differs.
+
+| Indicator | Illustrative Observation |
+|---|---|
+| Event ID | `4698` |
+| Activity | Scheduled Task Creation |
+| Task Name | `WindowsUpdateCheck` |
+| Executable | `powershell.exe` |
+| Execution Option | Hidden Window / Execution Policy Bypass |
+| Script Location | `C:\Users\Public\update.ps1` |
+| User | `john` |
+| Target Host | `Likhi` |
+| Investigation Priority | Requires further investigation if the task is unauthorized |
+
+### Evidence to Validate
+
+- Whether Event ID 4698 is present in the actual dataset.
+- The exact scheduled-task name.
+- The account responsible for creating the task.
+- The executable and arguments configured in the task.
+- Whether the task runs at startup, logon, or a recurring interval.
+- Whether the referenced executable or script exists.
+- Whether the task is authorized by the system administrator.
+- Whether related process-creation events or endpoint detection alerts exist.
+
+---
+
+## 7. Findings
+
+This investigation demonstrates a method for identifying and examining scheduled-task creation events in Windows Security logs.
+
+The analysis focuses on three important areas:
+
+1. **Task identification:** Determine which scheduled task was created.
+2. **Execution analysis:** Examine the executable, script path, and command-line arguments.
+3. **User attribution:** Identify which account created the scheduled task.
+
+An unexpected scheduled task combined with hidden PowerShell execution, suspicious script locations, or unauthorized user activity can indicate a possible persistence mechanism.
+
+However, scheduled tasks are also commonly used by Windows and legitimate applications for routine maintenance.
+
+The final findings must be based on actual events returned by Splunk rather than on the illustrative examples in this report.
+
+---
+
