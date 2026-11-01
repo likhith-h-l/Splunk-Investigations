@@ -216,3 +216,17 @@ Add a screenshot showing potentially suspicious execution commands, including Po
 If available, add evidence from Event ID 4688, PowerShell Event ID 4104, or EDR telemetry.
 
 ---
+
+## 10. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Windows Event ID | `4698` |
+| Supporting Event IDs | `4702`, `4699` |
+| Activity of Interest | Scheduled Task Creation |
+| Key Fields | Task Name, Task Content, User, Host, Timestamp |
+| Investigation Technique | Persistence Analysis |
+| Detection Method | Scheduled Task Command Analysis |
+| Suspicious Patterns | Hidden PowerShell, Encoded Commands, Execution Policy Bypass |
+| Supporting Evidence | Windows Security Logs, PowerShell Logs, EDR, Process Telemetry |
+| Risk Decision | Based on validated evidence and investigation context |
