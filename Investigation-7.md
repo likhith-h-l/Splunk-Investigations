@@ -88,3 +88,69 @@ These indicators do not automatically prove a brute-force attack. Incorrect pass
 ---
 
 
+## 5. SPL Query — Detect Repeated Failed Authentication Attempts
+
+To identify accounts experiencing repeated failed logins, I used the following query.
+
+### SPL Query
+
+```spl
+index=main EventCode=4625
+| eval username=coalesce(TargetUserName, Account_Name, user)
+| eval source_ip=coalesce(IpAddress, Source_Network_Address, src_ip)
+| eval workstation=coalesce(WorkstationName, Workstation_Name)
+| stats count as failed_attempts
+    values(source_ip) as source_ips
+    values(workstation) as workstations
+    by username
+| where failed_attempts >= 5
+| sort - failed_attempts
+```
+
+This query identifies accounts with five or more failed authentication events.
+
+### SPL Query — Correlate Account Lockouts with Failed Logins
+
+```spl
+index=main (EventCode=4625 OR EventCode=4740)
+| eval username=if(
+    EventCode=4740,
+    coalesce(TargetUserName, Account_Name),
+    coalesce(TargetUserName, Account_Name, user)
+)
+| eval source_ip=coalesce(IpAddress, Source_Network_Address, src_ip)
+| eval event_type=case(
+    EventCode=4625, "Failed Login",
+    EventCode=4740, "Account Lockout"
+)
+| stats
+    count(eval(EventCode=4625)) as failed_logins
+    count(eval(EventCode=4740)) as lockout_events
+    values(source_ip) as source_ips
+    values(event_type) as event_types
+    by username
+| where failed_logins >= 5 OR lockout_events > 0
+| sort - failed_logins
+```
+
+This query correlates failed authentication attempts with account-lockout events.
+
+It helps identify accounts that experienced repeated login failures and subsequent lockout activity.
+
+### What These Queries Do
+
+| SPL Component | Purpose |
+|---|---|
+| `EventCode=4625` | Searches failed login events |
+| `EventCode=4740` | Searches account-lockout events |
+| `coalesce()` | Handles alternative field names |
+| `eval` | Creates normalized investigation fields |
+| `stats` | Aggregates authentication events |
+| `values()` | Displays unique source IPs and workstations |
+| `where` | Filters accounts requiring investigation |
+| `sort` | Ranks accounts by failed attempts |
+
+**Important:** The correlation query aggregates events across the selected search period. It does not establish that failed logins occurred immediately before a lockout. Use a narrower time window and chronological event analysis to validate the sequence.
+
+---
+
