@@ -153,4 +153,116 @@ It helps identify accounts that experienced repeated login failures and subseque
 **Important:** The correlation query aggregates events across the selected search period. It does not establish that failed logins occurred immediately before a lockout. Use a narrower time window and chronological event analysis to validate the sequence.
 
 ---
+## 6. Investigation Results
 
+The following table describes the findings that should be recorded after running the queries. The example values are illustrative and must be replaced if the actual Splunk output differs.
+
+| Indicator | Illustrative Observation |
+|---|---|
+| Primary Event ID | `4740` |
+| Supporting Event ID | `4625` |
+| Affected Account | `john` |
+| Failed Login Attempts | `15` |
+| Caller Computer | `WORKSTATION-01` |
+| Source IP | `192.168.1.105` (illustrative) |
+| Account Lockout | Yes |
+| Investigation Priority | Requires further investigation if activity is unauthorized |
+
+### Evidence to Validate
+
+- Whether Event ID 4740 is present in the actual dataset.
+- Whether Event ID 4625 shows repeated failures against the same account.
+- The exact affected username.
+- The source IP address and workstation associated with the attempts.
+- The failure status and substatus codes.
+- Whether the attempts originated from one system or multiple systems.
+- Whether a successful login (Event ID 4624) occurred after the failures.
+- Whether the activity is associated with legitimate users, services, or stored credentials.
+
+---
+
+## 7. Findings
+
+This investigation demonstrates a method for identifying and examining Windows account-lockout activity using Splunk.
+
+The analysis focuses on three important areas:
+
+1. **Account identification:** Determine which user account experienced repeated authentication failures or lockouts.
+2. **Source analysis:** Identify the source IP address or workstation responsible for the authentication attempts.
+3. **Authentication correlation:** Examine failed login events and account-lockout events to understand the activity sequence.
+
+Repeated authentication failures followed by account lockouts can indicate password-guessing activity or a possible brute-force attempt.
+
+However, account lockouts can also occur because of expired passwords, incorrect credentials, automated services, and applications using outdated stored passwords.
+
+The final findings must be based on actual events returned by Splunk rather than on the illustrative examples in this report.
+
+---
+
+## 8. Conclusion
+
+Account lockout activity is an important security indicator that SOC analysts monitor to identify potentially unauthorized authentication attempts.
+
+Windows Security Event ID 4740 provides evidence of account-lockout activity, while Event ID 4625 provides information about failed authentication attempts.
+
+By correlating these events and examining usernames, source IP addresses, workstation names, and timestamps, SOC analysts can identify suspicious authentication patterns.
+
+Further investigation should examine:
+
+- Windows Event ID 4625 for failed authentication attempts.
+- Windows Event ID 4740 for account-lockout activity.
+- Windows Event ID 4624 for successful authentication.
+- Source IP addresses and workstation information.
+- Authentication failure status and substatus codes.
+- Whether multiple accounts are targeted from the same source.
+- Whether one account is targeted from multiple sources.
+- Active Directory authentication logs, where available.
+- Whether legitimate services or applications are causing repeated failures.
+
+### Final Assessment
+
+> **Assessment: Investigate repeated authentication failures and account-lockout events by validating the affected accounts, source systems, and authentication timeline before determining whether the activity represents a brute-force attack or legitimate authentication problems.**
+
+---
+
+## 9. Evidence
+
+### Evidence 1 — Account Lockout Events
+
+Add a Splunk screenshot showing available Event ID 4740 events.
+
+### Evidence 2 — Failed Authentication Analysis
+
+Add a screenshot showing Event ID 4625 events and repeated failed login attempts.
+
+### Evidence 3 — Source Analysis
+
+Add a screenshot showing affected usernames, source IP addresses, and workstation information.
+
+### Evidence 4 — Authentication Correlation
+
+Add a screenshot showing the correlation between failed login attempts and account-lockout events.
+
+### Evidence 5 — Successful Login Verification
+
+If available, add evidence from Event ID 4624 to determine whether a successful login occurred after the suspicious authentication activity.
+
+---
+
+## 10. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Primary Windows Event ID | `4740` |
+| Supporting Event IDs | `4625`, `4624` |
+| Activity of Interest | Account Lockout / Failed Authentication |
+| Key Fields | Username, Source IP, Workstation, Timestamp |
+| Investigation Technique | Authentication Analysis |
+| Detection Method | Repeated Failed Login Analysis |
+| Suspicious Patterns | Repeated Login Failures, Multiple Sources, Repeated Lockouts |
+| Supporting Evidence | Windows Security Logs, Active Directory Logs, Authentication Telemetry |
+| Risk Decision | Based on validated evidence and investigation context |
+
+---
+
+**Investigation Status:** Pending validation against actual Splunk events.
