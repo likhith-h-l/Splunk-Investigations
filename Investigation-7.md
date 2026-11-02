@@ -198,4 +198,29 @@ However, account lockouts can also occur because of expired passwords, incorrect
 The final findings must be based on actual events returned by Splunk rather than on the illustrative examples in this report.
 
 ---
+## 8. Conclusion
+
+Account lockout activity is an important security indicator that SOC analysts monitor to identify potentially unauthorized authentication attempts.
+
+Windows Security Event ID 4740 provides evidence of account-lockout activity, while Event ID 4625 provides information about failed authentication attempts.
+
+By correlating these events and examining usernames, source IP addresses, workstation names, and timestamps, SOC analysts can identify suspicious authentication patterns.
+
+Further investigation should examine:
+
+- Windows Event ID 4625 for failed authentication attempts.
+- Windows Event ID 4740 for account-lockout activity.
+- Windows Event ID 4624 for successful authentication.
+- Source IP addresses and workstation information.
+- Authentication failure status and substatus codes.
+- Whether multiple accounts are targeted from the same source.
+- Whether one account is targeted from multiple sources.
+- Active Directory authentication logs, where available.
+- Whether legitimate services or applications are causing repeated failures.
+
+### Final Assessment
+
+> **Assessment: Investigate repeated authentication failures and account-lockout events by validating the affected accounts, source systems, and authentication timeline before determining whether the activity represents a brute-force attack or legitimate authentication problems.**
+
+---
 
