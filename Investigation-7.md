@@ -223,4 +223,46 @@ Further investigation should examine:
 > **Assessment: Investigate repeated authentication failures and account-lockout events by validating the affected accounts, source systems, and authentication timeline before determining whether the activity represents a brute-force attack or legitimate authentication problems.**
 
 ---
+## 9. Evidence
+
+### Evidence 1 — Account Lockout Events
+
+Add a Splunk screenshot showing available Event ID 4740 events.
+
+### Evidence 2 — Failed Authentication Analysis
+
+Add a screenshot showing Event ID 4625 events and repeated failed login attempts.
+
+### Evidence 3 — Source Analysis
+
+Add a screenshot showing affected usernames, source IP addresses, and workstation information.
+
+### Evidence 4 — Authentication Correlation
+
+Add a screenshot showing the correlation between failed login attempts and account-lockout events.
+
+### Evidence 5 — Successful Login Verification
+
+If available, add evidence from Event ID 4624 to determine whether a successful login occurred after the suspicious authentication activity.
+
+---
+
+## 10. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Primary Windows Event ID | `4740` |
+| Supporting Event IDs | `4625`, `4624` |
+| Activity of Interest | Account Lockout / Failed Authentication |
+| Key Fields | Username, Source IP, Workstation, Timestamp |
+| Investigation Technique | Authentication Analysis |
+| Detection Method | Repeated Failed Login Analysis |
+| Suspicious Patterns | Repeated Login Failures, Multiple Sources, Repeated Lockouts |
+| Supporting Evidence | Windows Security Logs, Active Directory Logs, Authentication Telemetry |
+| Risk Decision | Based on validated evidence and investigation context |
+
+---
+
+**Investigation Status:** Pending validation against actual Splunk events.
+
 
