@@ -222,4 +222,48 @@ Further investigation should examine:
 > **Assessment: Investigate successful RemoteInteractive logons by validating the source IP address, user account, destination host, and surrounding authentication activity before determining whether unauthorized remote access occurred.**
 
 ---
+## 9. Evidence
+
+### Evidence 1 — Successful Authentication Events
+
+Add a Splunk screenshot showing available Event ID 4624 events.
+
+### Evidence 2 — RDP Login Analysis
+
+Add a screenshot showing successful logins filtered by Logon Type 10.
+
+### Evidence 3 — Source IP Analysis
+
+Add a screenshot showing the source IP addresses, usernames, and destination hosts associated with RDP activity.
+
+### Evidence 4 — Failed Login Correlation
+
+If available, add evidence showing Event ID 4625 events associated with the same accounts or source systems.
+
+### Evidence 5 — Post-Login Activity
+
+If available, add evidence from Event ID 4688 or EDR telemetry showing processes executed after the remote login.
+
+---
+
+## 10. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Primary Windows Event ID | `4624` |
+| Supporting Event IDs | `4625`, `4634`, `4672` |
+| Logon Type | `10 – RemoteInteractive` |
+| Activity of Interest | Remote Desktop Login |
+| Key Fields | Username, Source IP, Destination Host, Logon Type, Timestamp |
+| Investigation Technique | Remote Access Analysis |
+| Detection Method | RDP Authentication Monitoring |
+| Suspicious Patterns | Unfamiliar Source IPs, Privileged Account Logins, Unusual Login Times |
+| Supporting Evidence | Windows Security Logs, VPN Logs, Firewall Logs, EDR Telemetry |
+| Risk Decision | Based on validated evidence and investigation context |
+
+---
+
+**Investigation Status:** Pending validation against actual Splunk events.
+
+
 
