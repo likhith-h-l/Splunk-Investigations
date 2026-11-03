@@ -194,4 +194,32 @@ However, RDP is a legitimate remote administration feature, and unusual login ac
 The final findings must be based on actual events returned by Splunk rather than on the illustrative examples in this report.
 
 ---
+## 8. Conclusion
+
+Remote Desktop Protocol provides administrators and authorized users with remote access to Windows systems.
+
+However, attackers can abuse RDP to gain access to compromised systems and perform additional malicious activities.
+
+Windows Security Event ID 4624 provides useful evidence about successful authentication. Logon Type 10 is particularly relevant because it identifies RemoteInteractive logons.
+
+By analysing usernames, source IP addresses, destination hosts, and authentication timestamps, SOC analysts can identify potentially unauthorized remote access.
+
+Further investigation should examine:
+
+- Windows Event ID 4625 for failed remote authentication attempts.
+- Windows Event ID 4624 for successful remote logins.
+- Windows Event ID 4634 for logoff activity.
+- Windows Event ID 4672 for special privileges assigned to new logon sessions.
+- Source IP address reputation and ownership.
+- VPN and firewall connection logs.
+- Account privileges and authorized remote access policies.
+- Process creation events (4688) following the remote login.
+- Endpoint Detection and Response (EDR) alerts.
+- Whether the remote session initiated suspicious commands or file transfers.
+
+### Final Assessment
+
+> **Assessment: Investigate successful RemoteInteractive logons by validating the source IP address, user account, destination host, and surrounding authentication activity before determining whether unauthorized remote access occurred.**
+
+---
 
