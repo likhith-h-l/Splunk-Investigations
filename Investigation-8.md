@@ -147,4 +147,51 @@ The classification identifies events requiring review. It is not a definitive ma
 
 ---
 
+## 6. Investigation Results
+
+The following table describes the findings that should be recorded after running the queries. The example values are illustrative and must be replaced if the actual Splunk output differs.
+
+| Indicator | Illustrative Observation |
+|---|---|
+| Primary Event ID | `4624` |
+| Logon Type | `10` |
+| Activity | Successful RDP Login |
+| Username | `administrator` |
+| Source IP | `185.XX.XX.XX` (illustrative) |
+| Destination Host | `Likhi` |
+| Login Time | `22:10:15` |
+| Investigation Priority | Requires further investigation if the source is unauthorized |
+
+### Evidence to Validate
+
+- Whether Event ID 4624 is present in the actual dataset.
+- Whether Logon Type 10 is present in the authentication events.
+- The exact username associated with the remote session.
+- The source IP address of the connection.
+- The destination host receiving the connection.
+- Whether the source IP belongs to an authorized network or VPN.
+- Whether the login occurred during an expected time.
+- Whether corresponding failed authentication events (4625) occurred.
+- Whether the account has administrative privileges.
+- Whether subsequent suspicious process activity occurred after login.
+
+---
+
+## 7. Findings
+
+This investigation demonstrates a method for identifying and examining Remote Desktop login activity using Windows Security logs.
+
+The analysis focuses on three important areas:
+
+1. **Logon identification:** Determine whether successful authentication events involve RemoteInteractive logons.
+2. **Source analysis:** Identify the IP address and workstation associated with the remote connection.
+3. **Account analysis:** Examine which user account accessed the remote system and whether the activity was expected.
+
+Successful RDP logins from unfamiliar sources, privileged accounts, or unusual time periods can indicate potentially unauthorized remote access.
+
+However, RDP is a legitimate remote administration feature, and unusual login activity must be validated against authorized access records.
+
+The final findings must be based on actual events returned by Splunk rather than on the illustrative examples in this report.
+
+---
 
