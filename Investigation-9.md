@@ -149,3 +149,84 @@ It helps identify repeated service installation activity and provides executable
 The classification identifies service configurations requiring review. It is a hunting aid, not a definitive malware verdict.
 
 ---
+
+## 6. Investigation Results
+
+The following table describes the findings that should be recorded after running the queries. The example values are illustrative and must be replaced if the actual Splunk output differs.
+
+| Indicator | Illustrative Observation |
+|---|---|
+| Primary Event ID | `7045` |
+| Activity | Windows Service Creation |
+| Service Name | `WindowsUpdateService` |
+| Executable Path | `C:\Users\Public\update.exe` |
+| Service Account | `LocalSystem` |
+| Startup Type | Automatic |
+| Target Host | `Likhi` |
+| Investigation Priority | Requires further investigation if the service is unauthorized |
+
+### Evidence to Validate
+
+- Whether Event ID 7045 is present in the actual dataset.
+- The exact service name and executable path.
+- Whether the executable exists on the target system.
+- Whether the service is digitally signed.
+- Whether the service is associated with legitimate installed software.
+- Whether the service runs under LocalSystem or another account.
+- Whether the service uses automatic startup.
+- Whether Event ID 7036 shows the service entering a running state.
+- Whether related process-creation events (4688) exist.
+- Whether endpoint detection tools have generated alerts for the executable.
+
+---
+
+## 7. Findings
+
+This investigation demonstrates a method for identifying and examining Windows service installation events using Splunk.
+
+The analysis focuses on three important areas:
+
+1. **Service identification:** Determine which Windows service was newly installed.
+2. **Executable analysis:** Examine the executable path and identify unusual file locations or command interpreters.
+3. **Privilege analysis:** Determine which account the service uses and understand its execution privileges.
+
+Unexpected services running executables from temporary directories, public folders, or unusual user locations may indicate potentially unauthorized persistence.
+
+Services running under LocalSystem require particular attention because they can operate with extensive system privileges.
+
+However, Windows and legitimate applications frequently install services for normal system operations.
+
+The final findings must be based on actual events returned by Splunk rather than on the illustrative examples in this report.
+
+---
+
+## 8. Conclusion
+
+Windows Services provide a mechanism for running applications and background processes automatically.
+
+However, attackers can abuse service installation to establish persistence, execute malicious programs, and potentially obtain elevated privileges.
+
+Windows System Event ID 7045 provides useful evidence about newly installed services. Event ID 4697 can provide additional service installation evidence when the appropriate Windows auditing is enabled.
+
+By examining service names, executable paths, service accounts, and startup configurations, SOC analysts can identify potentially unauthorized service installations.
+
+Further investigation should examine:
+
+- Windows Event ID 7045 for service installation.
+- Windows Event ID 4697 for audited service installation.
+- Windows Event ID 7036 for service state changes.
+- Windows Event ID 4688 for related process creation.
+- The executable's file hash and reputation.
+- The executable's digital signature and publisher.
+- The service startup type and execution account.
+- File creation and modification timestamps.
+- Endpoint Detection and Response (EDR) alerts.
+- Whether the service is associated with authorized software installation or administrative activity.
+
+### Final Assessment
+
+> **Assessment: Investigate newly installed Windows services by validating their executable paths, service accounts, startup configurations, and associated process activity before determining whether unauthorized persistence is present.**
+
+---
+
+
