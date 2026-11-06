@@ -224,6 +224,48 @@ Further investigation should examine:
 - Whether the service is associated with authorized software installation or administrative activity.
 
 ### Final Assessment
+## 9. Evidence
+
+### Evidence 1 — Windows Service Installation Events
+
+Add a Splunk screenshot showing available Event ID 7045 events.
+
+### Evidence 2 — Service Configuration Analysis
+
+Add a screenshot showing service names, executable paths, and service accounts.
+
+### Evidence 3 — Suspicious Executable Path Analysis
+
+Add a screenshot showing services with unusual executable locations, such as Public, Temp, or AppData directories.
+
+### Evidence 4 — Service Execution Analysis
+
+If available, add evidence showing Event ID 7036 and whether the newly installed service entered a running state.
+
+### Evidence 5 — Corroborating Process Activity
+
+If available, add evidence from Event ID 4688 or EDR telemetry showing the executable associated with the newly installed service.
+
+---
+
+## 10. Key Indicators
+
+| Indicator | Value |
+|---|---|
+| Primary Windows Event ID | `7045` |
+| Supporting Event IDs | `4697`, `7036`, `4688` |
+| Activity of Interest | Windows Service Creation |
+| Key Fields | Service Name, Image Path, Service Account, Startup Type, Host, Timestamp |
+| Investigation Technique | Persistence Analysis |
+| Detection Method | Service Installation and Executable Path Analysis |
+| Suspicious Patterns | Unusual Executable Paths, Misleading Service Names, Unexpected Privileged Services |
+| Supporting Evidence | Windows System Logs, Security Logs, EDR, Process Telemetry |
+| Risk Decision | Based on validated evidence and investigation context |
+
+---
+
+**Investigation Status:** Pending validation against actual Splunk events.
+
 
 > **Assessment: Investigate newly installed Windows services by validating their executable paths, service accounts, startup configurations, and associated process activity before determining whether unauthorized persistence is present.**
 
